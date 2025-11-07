@@ -1,0 +1,7 @@
+{
+  "name": "Moto Trip Planner AI",
+  "description": "An AI-powered trip planner for motorcyclists, providing detailed routes, weather forecasts, points of interest, fuel stops, and critical safety advisories.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
