@@ -48,7 +48,7 @@ const tripPlanSchema = {
           forecast: { type: Type.STRING, description: "e.g., 'Sunny, 75°F'" },
           temperature: { type: Type.STRING, description: "e.g., '75°F / 24°C'" },
           lat: { type: Type.NUMBER, description: "Latitude of the weather location." },
-          lng: { type: TYPE.NUMBER, description: "Longitude of the weather location." },
+          lng: { type: Type.NUMBER, description: "Longitude of the weather location." },
         },
         required: ['location', 'forecast', 'temperature', 'lat', 'lng'],
       },
