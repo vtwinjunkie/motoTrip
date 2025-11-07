@@ -1,3 +1,4 @@
+import { config } from '../config';
 import { GoogleGenAI, Type } from '@google/genai';
 import type { TripPlan, WeatherPoint } from '../types';
 
@@ -47,7 +48,7 @@ const tripPlanSchema = {
           forecast: { type: Type.STRING, description: "e.g., 'Sunny, 75°F'" },
           temperature: { type: Type.STRING, description: "e.g., '75°F / 24°C'" },
           lat: { type: Type.NUMBER, description: "Latitude of the weather location." },
-          lng: { type: Type.NUMBER, description: "Longitude of the weather location." },
+          lng: { type: TYPE.NUMBER, description: "Longitude of the weather location." },
         },
         required: ['location', 'forecast', 'temperature', 'lat', 'lng'],
       },
@@ -164,11 +165,11 @@ export async function generateTripPlan(
     vehicleType: 'motorcycle' | 'car', 
     isElectric: boolean
 ): Promise<TripPlan> {
-  if (!process.env.API_KEY) {
-    throw new Error("API_KEY environment variable not set.");
+  if (!config.GEMINI_API_KEY) {
+    throw new Error("GEMINI_API_KEY not set in config.");
   }
   
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const ai = new GoogleGenAI({ apiKey: config.GEMINI_API_KEY });
 
   const start = destinations[0];
   const end = destinations[destinations.length - 1];
