@@ -1,5 +1,5 @@
+import { config } from '../config';
 import type { GeocodingSuggestion } from '../types';
-
 // Fix: Add a global declaration for `window.google` to inform TypeScript about the property
 // added by the Google Maps script.
 declare global {
@@ -7,13 +7,10 @@ declare global {
     google: any;
   }
 }
-
 // Declare google for TypeScript to recognize the SDK loaded from the script
 declare const google: any;
-
 let autocompleteService: any;
 let scriptLoadingPromise: Promise<void> | null = null;
-
 /**
  * Dynamically loads the Google Maps JavaScript SDK.
  * Ensures the script is only loaded once.
@@ -23,19 +20,16 @@ const loadGoogleMapsScript = (): Promise<void> => {
   if (scriptLoadingPromise) {
     return scriptLoadingPromise;
   }
-
   scriptLoadingPromise = new Promise((resolve, reject) => {
-    const apiKey = process.env.API_KEY;
+    const apiKey = config.GOOGLE_MAPS_API_KEY;
     if (!apiKey) {
-      console.error("API_KEY not set, cannot load Google Maps script.");
-      return reject(new Error("API_KEY environment variable not set."));
+      console.error("GOOGLE_MAPS_API_KEY not set in config, cannot load Google Maps script.");
+      return reject(new Error("GOOGLE_MAPS_API_KEY not set in config."));
     }
-
     // If script is already present, resolve immediately
     if (window.google && window.google.maps) {
       return resolve();
     }
-
     const script = document.createElement('script');
     script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`;
     script.async = true;
@@ -47,11 +41,8 @@ const loadGoogleMapsScript = (): Promise<void> => {
     };
     document.head.appendChild(script);
   });
-
   return scriptLoadingPromise;
 };
-
-
 /**
  * Initializes and returns a singleton instance of the Google Places AutocompleteService.
  * @returns A promise that resolves with the AutocompleteService instance.
@@ -67,7 +58,6 @@ const getAutocompleteService = async (): Promise<any> => {
   }
   return autocompleteService;
 };
-
 /**
  * Fetches location suggestions using the Google Maps JavaScript SDK.
  * @param query The user's input string.
@@ -76,7 +66,6 @@ const getAutocompleteService = async (): Promise<any> => {
 export const fetchSuggestions = async (query: string): Promise<GeocodingSuggestion[]> => {
   try {
     const service = await getAutocompleteService();
-
     return new Promise((resolve) => {
       service.getPlacePredictions(
         { input: query },
@@ -85,11 +74,9 @@ export const fetchSuggestions = async (query: string): Promise<GeocodingSuggesti
             console.error('Google Places API returned an error status:', status);
             return resolve([]); // Gracefully handle API errors by returning no suggestions
           }
-
           if (!predictions) {
             return resolve([]);
           }
-
           // Map the Google API response to our app's data structure.
           const suggestions = predictions.map((prediction: any) => ({
             displayName: prediction.description,
