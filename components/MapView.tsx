@@ -231,7 +231,7 @@ const MapView: React.FC<MapViewProps> = ({ plan, onReroute }) => {
   return (
     <div className="p-1">
       <div className="relative">
-        <div ref={mapContainerRef} style={{ height: '60vh', borderRadius: '12px', zIndex: 0, backgroundColor: '#374151' }} />
+        <div ref={mapContainerRef} className="h-[400px] sm:h-[500px] md:h-[600px] lg:h-[60vh]" style={{ borderRadius: '12px', zIndex: 0, backgroundColor: '#374151' }} />
         <div className="absolute bottom-4 right-4 z-10 flex flex-col items-end gap-3">
              <button onClick={recenterMap} className="flex items-center gap-2 bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-5 rounded-xl transition duration-300 shadow-lg">
                 <FocusRouteIcon className="h-5 w-5" /> Recenter Route
